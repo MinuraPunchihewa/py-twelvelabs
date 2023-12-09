@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 from typing import Text, Dict
 
@@ -40,6 +41,21 @@ class TwelveLabsAPIClient:
             return Index(**result)
         else:
             raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
+
+    def update_index_name(self, index_id: Text, index_name: Text) -> Dict:
+        """
+        Update an index name.
+
+        :param index_id: Index ID.
+        :param index_name: Index name.
+        :return: True if successful.
+        """
+
+        response = self._submit_request(f"indexes/{index_id}", headers={"accept": "application/json"}, method="PUT", data={"index_name": index_name})
+        if response.status_code == 200:
+            return True
+        else:
+            raise APIRequestError(f"Failed to update index {index_id} name: {result['message']}")
 
     def _get_api_key(self, api_key: Text = None) -> Text:
         """
@@ -108,6 +124,13 @@ class TwelveLabsAPIClient:
 
         elif method == "POST":
             response = requests.post(
+                url=url,
+                headers=headers,
+                json=data,
+            )
+
+        elif method == "PUT":
+            response = requests.put(
                 url=url,
                 headers=headers,
                 json=data,
