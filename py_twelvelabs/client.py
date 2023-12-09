@@ -4,15 +4,13 @@ import requests
 from typing import Text, Dict
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from .models import Index
-from .utilities import get_logger
-from .exceptions import MissingAPIKeyError, MethodNotImplementedError, APIRequestError
+from .utilities.logger import get_logger
+from .resources import IndexResource
+from .exceptions import MissingAPIKeyError, MethodNotImplementedError
 
 # TODO: move to config
 BASE_API_URL = "https://api.twelvelabs.io"
 API_VERSION = "v1.1"
-DEFAULT_ENGINE = "marengo2.5"
-DEFAULT_WAIT_DURATION = 5
 
 
 class TwelveLabsAPIClient:
@@ -28,60 +26,7 @@ class TwelveLabsAPIClient:
         self.api_key = self._get_api_key(api_key)
         self.logger = get_logger(__name__)
 
-    def create_index(self, index_name: Text, engine_id: Text = DEFAULT_ENGINE, index_options: List[Text], addons: List[Text] = None) -> Text:
-        """
-        Create an index.
-
-        :param index_name: Index name.
-        :param engine_id: Engine ID. 
-        :param index_options: Index options.
-        :param addons: Addons.
-        :return: Index ID.
-        """
-
-        data = {
-            "index_name": index_name,
-            "engine_id": engine_id,
-            "index_options": index_options,
-            "addons": addons,
-        }
-
-        response = self._submit_request("indexes", method="POST", data=data)
-        result = response.json()
-        if response.status_code == 200:
-            return result['_id']
-        else:
-            raise APIRequestError(f"Failed to create index {index_name}: {result['message']}")
-
-    def get_index(self, index_id: Text) -> Index:
-        """
-        Get an index.
-
-        :param index_id: Index ID.
-        :return: Index.
-        """
-        
-        response = self._submit_request(f"indexes/{index_id}")
-        result = response.json()
-        if response.status_code == 200:
-            return Index(**result)
-        else:
-            raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
-
-    def update_index_name(self, index_id: Text, index_name: Text) -> bool:
-        """
-        Update an index name.
-
-        :param index_id: Index ID.
-        :param index_name: Index name.
-        :return: True if successful.
-        """
-
-        response = self._submit_request(f"indexes/{index_id}", headers={"accept": "application/json"}, method="PUT", data={"index_name": index_name})
-        if response.status_code == 200:
-            return True
-        else:
-            raise APIRequestError(f"Failed to update index {index_id} name: {result['message']}")
+        self.index = IndexResource(self)
 
     def _get_api_key(self, api_key: Text = None) -> Text:
         """
@@ -126,7 +71,7 @@ class TwelveLabsAPIClient:
 
         return f"{BASE_API_URL}/{API_VERSION}/{endpoint}"
 
-    def _submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None, data: Dict = None, method: str = "GET") -> requests.Response:
+    def submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None, data: Dict = None, method: str = "GET") -> requests.Response:
         """
         Submit a request to the Twelve Labs API.
 
@@ -167,7 +112,7 @@ class TwelveLabsAPIClient:
 
         return response
 
-    def _submit_multi_part_request(self, endpoint: str, data: Dict, headers: Dict = None, method: str = "GET") -> requests.Response:
+    def submit_multi_part_request(self, endpoint: str, data: Dict, headers: Dict = None, method: str = "GET") -> requests.Response:
         """
         Submit a multi-part request to the Twelve Labs API.
 
