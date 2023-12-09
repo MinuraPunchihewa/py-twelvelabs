@@ -11,3 +11,10 @@ class MethodNotImplementedError(Exception):
     Raised when a method is not implemented.
     """
     pass
+
+
+class APIRequestError(Exception):
+    """
+    Raised when an API request fails.
+    """
+    pass
