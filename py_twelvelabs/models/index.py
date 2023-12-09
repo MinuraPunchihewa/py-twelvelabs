@@ -14,5 +14,5 @@ class Index(BaseModel):
     updated_at: Text
     engine_id: Text
     video_count: int
-    total_duration: int
+    total_duration: float
     addons: List[Text]

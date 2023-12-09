@@ -1,6 +1,9 @@
+import os
+import requests
 from typing import Text, Dict
 
-from utilities import get_logger
+from .models import Index
+from .utilities import get_logger
 from .exceptions import MissingAPIKeyError, MethodNotImplementedError, APIRequestError
 
 # TODO: move to config
@@ -81,7 +84,7 @@ class TwelveLabsAPIClient:
 
         return f"{BASE_API_URL}/{API_VERSION}/{endpoint}"
 
-    def _submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None data: Dict = None, method: str = "GET") -> Dict:
+    def _submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None, data: Dict = None, method: str = "GET") -> Dict:
         """
         Submit a request to the Twelve Labs API.
 

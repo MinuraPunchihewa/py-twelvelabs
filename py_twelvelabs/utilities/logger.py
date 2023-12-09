@@ -64,7 +64,7 @@ def configure_logging():
     dictConfig(logging_config)
 
 
-def getLogger(name=None):
+def get_logger(name=None):
     """
     Get a logger instance.
 
