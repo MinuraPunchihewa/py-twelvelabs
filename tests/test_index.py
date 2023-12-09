@@ -3,9 +3,9 @@ import unittest
 from py_twelvelabs import TwelveLabsAPIClient
 
 
-class TestPyTwelveLabs(unittest.TestCase):
+class TestIndex(unittest.TestCase):
     """
-    Test py_twelvelabs.
+    Test index resource.
     """
 
     def setUp(self):
