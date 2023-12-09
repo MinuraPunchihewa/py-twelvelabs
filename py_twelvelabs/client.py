@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from typing import Text, Dict
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from .models import Index
 from .utilities import get_logger
@@ -27,7 +28,7 @@ class TwelveLabsAPIClient:
         self.api_key = self._get_api_key(api_key)
         self.logger = get_logger(__name__)
 
-    def get_index(self, index_id: Text) -> Dict:
+    def get_index(self, index_id: Text) -> Index:
         """
         Get an index.
 
@@ -42,7 +43,7 @@ class TwelveLabsAPIClient:
         else:
             raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
 
-    def update_index_name(self, index_id: Text, index_name: Text) -> Dict:
+    def update_index_name(self, index_id: Text, index_name: Text) -> bool:
         """
         Update an index name.
 
@@ -100,7 +101,7 @@ class TwelveLabsAPIClient:
 
         return f"{BASE_API_URL}/{API_VERSION}/{endpoint}"
 
-    def _submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None, data: Dict = None, method: str = "GET") -> Dict:
+    def _submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None, data: Dict = None, method: str = "GET") -> requests.Response:
         """
         Submit a request to the Twelve Labs API.
 
@@ -138,5 +139,34 @@ class TwelveLabsAPIClient:
 
         else:
             raise MethodNotImplementedError(f"Method {method} not implemented yet.")
+
+        return response
+
+    def _submit_multi_part_request(self, endpoint: str, data: Dict, headers: Dict = None, method: str = "GET") -> requests.Response:
+        """
+        Submit a multi-part request to the Twelve Labs API.
+
+        :param endpoint: API endpoint.
+        :param headers: Request headers. The API key and content type are automatically added.
+        :param data: Request data.
+        :param method: HTTP method.
+        :return: Response data.
+        """
+
+        url = self._get_url(endpoint)
+        headers = self._get_headers(headers)
+
+        multipart_data = MultipartEncoder(fields=data)
+        headers['Content-Type'] = multipart_data.content_type
+
+        if method == "POST":
+            response = requests.post(
+                url=url,
+                headers=headers,
+                data=multipart_data,
+            )
+
+        else:
+            raise MethodNotImplementedError(f"Method {method} not supported yet.")
 
         return response
