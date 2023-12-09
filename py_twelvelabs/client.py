@@ -1,7 +1,7 @@
 from typing import Text, Dict
 
 from utilities import get_logger
-from .exceptions import MissingAPIKeyError
+from .exceptions import MissingAPIKeyError, MethodNotImplementedError
 
 # TODO: move to config
 BASE_API_URL = "https://api.twelvelabs.io"
@@ -93,7 +93,7 @@ class TwelveLabsAPIClient:
             )
 
         else:
-            raise NotImplementedError(f"Method {method} not implemented yet.")
+            raise MethodNotImplementedError(f"Method {method} not implemented yet.")
 
         result = response.json()
 
