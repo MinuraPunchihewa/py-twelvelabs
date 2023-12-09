@@ -69,6 +69,7 @@ def getLogger(name=None):
     Get a logger instance.
 
     :param name: Name of the logger. If None, the root logger is returned.
+    :return: Logger instance.
     """
     configure_logging()
 
