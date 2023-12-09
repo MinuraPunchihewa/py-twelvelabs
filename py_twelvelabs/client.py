@@ -28,6 +28,31 @@ class TwelveLabsAPIClient:
         self.api_key = self._get_api_key(api_key)
         self.logger = get_logger(__name__)
 
+    def create_index(self, index_name: Text, engine_id: Text = DEFAULT_ENGINE, index_options: List[Text], addons: List[Text] = None) -> Text:
+        """
+        Create an index.
+
+        :param index_name: Index name.
+        :param engine_id: Engine ID. 
+        :param index_options: Index options.
+        :param addons: Addons.
+        :return: Index ID.
+        """
+
+        data = {
+            "index_name": index_name,
+            "engine_id": engine_id,
+            "index_options": index_options,
+            "addons": addons,
+        }
+
+        response = self._submit_request("indexes", method="POST", data=data)
+        result = response.json()
+        if response.status_code == 200:
+            return result['_id']
+        else:
+            raise APIRequestError(f"Failed to create index {index_name}: {result['message']}")
+
     def get_index(self, index_id: Text) -> Index:
         """
         Get an index.
