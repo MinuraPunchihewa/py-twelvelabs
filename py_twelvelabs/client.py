@@ -1,7 +1,7 @@
 from typing import Text, Dict
 
 from utilities import get_logger
-from .exceptions import MissingAPIKeyError, MethodNotImplementedError
+from .exceptions import MissingAPIKeyError, MethodNotImplementedError, APIRequestError
 
 # TODO: move to config
 BASE_API_URL = "https://api.twelvelabs.io"
@@ -23,6 +23,21 @@ class TwelveLabsAPIClient:
         self.api_key = self._get_api_key(api_key)
         self.logger = get_logger(__name__)
 
+    def get_index(self, index_id: Text) -> Dict:
+        """
+        Get an index.
+
+        :param index_id: Index ID.
+        :return: Index.
+        """
+        
+        response = self._submit_request(f"indexes/{index_id}")
+        result = response.json()
+        if response.status_code == 200:
+            return Index(**result)
+        else:
+            raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
+
     def _get_api_key(self, api_key: Text = None) -> Text:
         """
         Get the API key.
@@ -32,6 +47,7 @@ class TwelveLabsAPIClient:
         :param api_key: API key.
         :return: API key.
         """
+
         if api_key is None:
             api_key = os.environ.get('TWELVE_LABS_API_KEY', None)
         if api_key is None:
@@ -45,6 +61,7 @@ class TwelveLabsAPIClient:
         :param headers: Request headers.
         :return: Request headers.
         """
+
         if headers is None:
             headers = {}
 
@@ -61,6 +78,7 @@ class TwelveLabsAPIClient:
         :param endpoint: API endpoint.
         :return: API URL.
         """
+
         return f"{BASE_API_URL}/{API_VERSION}/{endpoint}"
 
     def _submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None data: Dict = None, method: str = "GET") -> Dict:
@@ -95,6 +113,4 @@ class TwelveLabsAPIClient:
         else:
             raise MethodNotImplementedError(f"Method {method} not implemented yet.")
 
-        result = response.json()
-
-        return result
+        return response
