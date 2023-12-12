@@ -50,6 +50,37 @@ class IndexResource:
             return Index(**result)
         else:
             raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
+        
+    def list(self, page: int = 1, page_limit: str = 10, sort_by: str = "create_at", sort_option: str =  "desc", _id: str = None, index_name: str = None, index_options: List[str] = None) -> List[Index]:
+        """
+        List indexes.
+
+        :param page: Page number.
+        :param page_limit: Page limit.
+        :param sort_by: Sort by.
+        :param sort_option: Sort option.
+        :param _id: Index ID.
+        :param index_name: Index name.
+        :param index_options: Index options.
+        :return: List of Indexes.
+        """
+
+        params = {
+            "page": page,
+            "page_limit": page_limit,
+            "sort_by": sort_by,
+            "sort_option": sort_option,
+            "_id": _id,
+            "index_name": index_name,
+            "index_options": index_options,
+        }
+
+        response = self.client.submit_request("indexes", params=params)
+        result = response.json()
+        if response.status_code == 200:
+            return [Index(**index) for index in result['data']]
+        else:
+            raise APIRequestError(f"Failed to list indexes: {result['message']}")
 
     def update(self, index_id: Text, index_name: Text) -> bool:
         """
@@ -64,4 +95,20 @@ class IndexResource:
         if response.status_code == 200:
             return True
         else:
+            result = response.json()
             raise APIRequestError(f"Failed to update index {index_id} name: {result['message']}")
+        
+    def delete(self, index_id: Text) -> bool:
+        """
+        Delete an index.
+
+        :param index_id: Index ID.
+        :return: True if successful.
+        """
+
+        response = self.client.submit_request(f"indexes/{index_id}", method="DELETE")
+        if response.status_code == 200:
+            return True
+        else:
+            result = response.json()
+            raise APIRequestError(f"Failed to delete index {index_id}: {result['message']}")
