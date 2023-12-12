@@ -18,3 +18,10 @@ class APIRequestError(Exception):
     Raised when an API request fails.
     """
     pass
+
+
+class InsufficientParametersError(Exception):
+    """
+    Raised when insufficient parameters are provided.
+    """
+    pass
