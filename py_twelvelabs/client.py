@@ -107,6 +107,12 @@ class TwelveLabsAPIClient:
                 json=data,
             )
 
+        elif method == "DELETE":
+            response = requests.delete(
+                url=url,
+                headers=headers,
+            )
+
         else:
             raise MethodNotImplementedError(f"Method {method} not implemented yet.")
 
