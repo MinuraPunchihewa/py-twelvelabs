@@ -51,7 +51,7 @@ class IndexResource:
         else:
             raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
         
-    def list(self, page: int = 1, page_limit: str = 10, sort_by: str = "create_at", sort_option: str =  "desc", _id: str = None, index_name: str = None, index_options: List[str] = None) -> List[Index]:
+    def list(self, page: int = 1, page_limit: str = 10, sort_by: str = "created_at", sort_option: str =  "desc", _id: str = None, index_name: str = None, index_options: List[str] = None) -> List[Index]:
         """
         List indexes.
 
@@ -107,7 +107,7 @@ class IndexResource:
         """
 
         response = self.client.submit_request(f"indexes/{index_id}", method="DELETE")
-        if response.status_code == 200:
+        if response.status_code == 204  :
             return True
         else:
             result = response.json()
