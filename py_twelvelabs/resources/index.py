@@ -1,4 +1,4 @@
-from typing import Text, Dict, List
+from typing import Text, List
 
 from py_twelvelabs.models import Index
 from py_twelvelabs.exceptions import APIRequestError
