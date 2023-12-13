@@ -61,3 +61,18 @@ class TaskResource:
             return Task(**result)
         else:
             raise APIRequestError(f"Failed to get task {task_id}: {result['message']}")
+        
+    def delete(self, task_id: str):
+        """
+        Delete a task.
+
+        :param task_id: Task ID.
+        :return: True if successful.
+        """
+
+        response = self.client.submit_request(f"tasks/{task_id}", method="DELETE")
+        if response.status_code == 204:
+            return True
+        else:
+            result = response.json()
+            raise APIRequestError(f"Failed to delete task {task_id}: {result['message']}")

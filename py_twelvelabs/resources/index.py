@@ -105,7 +105,7 @@ class IndexResource:
         """
 
         response = self.client.submit_request(f"indexes/{index_id}", method="DELETE")
-        if response.status_code == 204  :
+        if response.status_code == 204:
             return True
         else:
             result = response.json()
