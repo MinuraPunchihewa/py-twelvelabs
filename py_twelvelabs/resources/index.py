@@ -1,17 +1,15 @@
 from typing import Text, List
 
+from py_twelvelabs.settings import settings
 from py_twelvelabs.models import Index
 from py_twelvelabs.exceptions import APIRequestError
-
-# TODO: move to config
-DEFAULT_ENGINE = "marengo2.5"
 
 
 class IndexResource:
     def __init__(self, client):
         self.client = client
 
-    def create(self, index_name: Text, index_options: List[Text], engine_id: Text = DEFAULT_ENGINE, addons: List[Text] = None) -> Text:
+    def create(self, index_name: Text, index_options: List[Text], engine_id: Text = settings.DEFAULT_ENGINE, addons: List[Text] = None) -> Text:
         """
         Create an index.
 

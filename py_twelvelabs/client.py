@@ -1,16 +1,12 @@
 import os
-import json
 import requests
 from typing import Text, Dict
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
+from .settings import settings
 from .utilities.logger import get_logger
 from .resources import IndexResource
 from .exceptions import MissingAPIKeyError, MethodNotImplementedError
-
-# TODO: move to config
-BASE_API_URL = "https://api.twelvelabs.io"
-API_VERSION = "v1.1"
 
 
 class TwelveLabsAPIClient:
@@ -69,7 +65,7 @@ class TwelveLabsAPIClient:
         :return: API URL.
         """
 
-        return f"{BASE_API_URL}/{API_VERSION}/{endpoint}"
+        return f"{settings.BASE_API_URL}/{settings.API_VERSION}/{endpoint}"
 
     def submit_request(self, endpoint: str, headers: Dict = None, params: Dict = None, data: Dict = None, method: str = "GET") -> requests.Response:
         """
