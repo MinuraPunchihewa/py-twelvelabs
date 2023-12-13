@@ -20,3 +20,16 @@ class Task(BaseModel):
     @validator("created_at", "updated_at", "estimated_time", pre=True, allow_reuse=True)
     def parse_date(cls, value):
         return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
+    
+
+class TaskStatus(BaseModel):
+    """
+    Task status model.
+    """
+
+    index_id: Text
+    ready: int
+    validating: int
+    pending: int
+    failed: int
+    total: int
