@@ -1,2 +1,2 @@
-from .index import Index
-from .task import Task
+from py_twelvelabs.models.index import Index
+from py_twelvelabs.models.task import Task

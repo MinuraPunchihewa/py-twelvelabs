@@ -1,1 +1,1 @@
-from .logger import get_logger
+from py_twelvelabs.utilities.logger import get_logger

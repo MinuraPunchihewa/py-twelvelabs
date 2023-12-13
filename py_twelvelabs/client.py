@@ -3,10 +3,10 @@ import requests
 from typing import Text, Dict
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from .settings import settings
-from .utilities.logger import get_logger
-from .resources import IndexResource
-from .exceptions import MissingAPIKeyError, MethodNotImplementedError
+from py_twelvelabs.settings import settings
+from py_twelvelabs.utilities.logger import get_logger
+from py_twelvelabs.resources import IndexResource
+from py_twelvelabs.exceptions import MissingAPIKeyError, MethodNotImplementedError
 
 
 class TwelveLabsAPIClient:
