@@ -1,3 +1,5 @@
+from typing import Text, List
+
 from py_twelvelabs.models import Task
 from py_twelvelabs.exceptions import APIRequestError, InsufficientParametersError
 
@@ -6,7 +8,7 @@ class TaskResource:
     def __init__(self, client):
         self.client = client
 
-    def create(self, index_id: str, video_file: str = None, video_url: str = None, language: str = "en", provide_transcription: bool = False, transcription_file: str = None, transcription_url: str = None, disable_video_stream: bool = False):
+    def create(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: bool = False, transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: bool = False):
         """
         Create a task.
 
@@ -47,7 +49,7 @@ class TaskResource:
         else:
             raise APIRequestError(f"Failed to create task: {result['message']}")
         
-    def get(self, task_id: str) -> Task:
+    def get(self, task_id: Text) -> Task:
         """
         Get a task.
 
@@ -62,7 +64,50 @@ class TaskResource:
         else:
             raise APIRequestError(f"Failed to get task {task_id}: {result['message']}")
         
-    def delete(self, task_id: str):
+    def list(self, page: int = 1, page_limit: Text = 10, sort_by: Text = "created_at", sort_option: Text = "desc", _id: Text = None, index_id: Text = None, filename: Text = None, duration: int = None, width: int = None, height: int = None, created_at: Text = None, updated_at: Text = None, estimated_time: Text = None) -> List[Task]:
+        """
+        List tasks.
+
+        :param page: Page number.
+        :param page_limit: Page limit.
+        :param sort_by: Sort by.
+        :param sort_option: Sort option.
+        :param _id: Task ID.
+        :param index_id: Index ID.
+        :param filename: Filename.
+        :param duration: Duration.
+        :param width: Width.
+        :param height: Height.
+        :param created_at: Created at.
+        :param updated_at: Updated at.
+        :param estimated_time: Estimated time.
+        :return: List of Tasks.
+        """
+
+        params = {
+            "page": page,
+            "page_limit": page_limit,
+            "sort_by": sort_by,
+            "sort_option": sort_option,
+            "_id": _id,
+            "index_id": index_id,
+            "filename": filename,
+            "duration": duration,
+            "width": width,
+            "height": height,
+            "created_at": created_at,
+            "updated_at": updated_at,
+            "estimated_time": estimated_time,
+        }
+
+        response = self.client.submit_request("tasks", params=params)
+        result = response.json()
+        if response.status_code == 200:
+            return [Task(**task) for task in result['data']]
+        else:
+            raise APIRequestError(f"Failed to list tasks: {result['message']}")
+        
+    def delete(self, task_id: Text):
         """
         Delete a task.
 

@@ -49,7 +49,7 @@ class IndexResource:
         else:
             raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
         
-    def list(self, page: int = 1, page_limit: str = 10, sort_by: str = "created_at", sort_option: str =  "desc", _id: str = None, index_name: str = None, index_options: List[str] = None) -> List[Index]:
+    def list(self, page: int = 1, page_limit: Text = 10, sort_by: Text = "created_at", sort_option: Text = "desc", _id: Text = None, index_name: Text = None, index_options: List[Text] = None) -> List[Index]:
         """
         List indexes.
 
