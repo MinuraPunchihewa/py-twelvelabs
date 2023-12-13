@@ -1,7 +1,7 @@
 
 from datetime import datetime
-from pydantic import BaseModel, validator
 from typing import Text, Dict
+from pydantic import BaseModel, validator
 
 
 class Task(BaseModel):

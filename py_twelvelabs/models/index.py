@@ -1,6 +1,6 @@
 from datetime import datetime
-from pydantic import BaseModel, validator
 from typing import Text, List, Optional
+from pydantic import BaseModel, validator
 
 
 class Index(BaseModel):
