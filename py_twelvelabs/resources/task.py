@@ -1,3 +1,4 @@
+import mimetypes
 from typing import Text, List
 
 from py_twelvelabs.models import Task, TaskStatus
@@ -34,7 +35,7 @@ class TaskResource:
         }
 
         if video_file is not None:
-            data['video_file'] = video_file
+            data['video_file'] = self._get_video_tuple(video_file)
         if video_url is not None:
             data['video_url'] = video_url
         if transcription_file is not None:
@@ -48,6 +49,9 @@ class TaskResource:
             return result['_id']
         else:
             raise APIRequestError(f"Failed to create task: {result['message']}")
+
+    def _get_video_tuple(self, video_file):
+        return (video_file, open(video_file, "rb"), mimetypes.guess_type(video_file )[0])
         
     def get(self, task_id: Text) -> Task:
         """
