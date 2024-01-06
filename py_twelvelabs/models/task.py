@@ -11,13 +11,14 @@ class Task(BaseModel):
 
     _id: Text
     index_id: Text
+    video_id: Text
     status: Text
     metadata: Dict
     created_at: datetime
     updated_at: datetime
-    estimated_time: datetime
+    type: Text
 
-    @validator("created_at", "updated_at", "estimated_time", pre=True, allow_reuse=True)
+    @validator("created_at", "updated_at", pre=True, allow_reuse=True)
     def parse_date(cls, value):
         return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
     
