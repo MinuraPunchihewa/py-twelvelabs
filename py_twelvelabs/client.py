@@ -5,7 +5,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from py_twelvelabs.settings import settings
 from py_twelvelabs.utilities.logger import get_logger
-from py_twelvelabs.resources import IndexResource
+from py_twelvelabs.resources import IndexResource, TaskResource
 from py_twelvelabs.exceptions import MissingAPIKeyError, MethodNotImplementedError
 
 
@@ -23,6 +23,7 @@ class TwelveLabsAPIClient:
         self.logger = get_logger(__name__)
 
         self.index = IndexResource(self)
+        self.task = TaskResource(self)
 
     def _get_api_key(self, api_key: Text = None) -> Text:
         """
