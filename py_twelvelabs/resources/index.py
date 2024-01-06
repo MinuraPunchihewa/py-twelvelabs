@@ -1,7 +1,7 @@
 from typing import Text, List
 
 from py_twelvelabs.settings import settings
-from py_twelvelabs.models import Index
+from py_twelvelabs.models import Index, TaskStatus
 from py_twelvelabs.exceptions import APIRequestError
 
 
@@ -48,6 +48,22 @@ class IndexResource:
             return Index(**result)
         else:
             raise APIRequestError(f"Failed to get index {index_id}: {result['message']}")
+        
+    def get_task_status(self, index_id: Text) -> TaskStatus:
+        """
+        Get task status.
+
+        :param index_id: Index ID.
+        :return: Task status.
+        """
+
+        response = self.client.submit_request(f"tasks/status?index_id={index_id}")
+        result = response.json()
+        print(result)
+        if response.status_code == 200:
+            return TaskStatus(**result)
+        else:
+            raise APIRequestError(f"Failed to get task status for index {index_id}: {result['message']}")
         
     def list(self, page: int = 1, page_limit: Text = 10, sort_by: Text = "created_at", sort_option: Text = "desc", _id: Text = None, index_name: Text = None, index_options: List[Text] = None) -> List[Index]:
         """

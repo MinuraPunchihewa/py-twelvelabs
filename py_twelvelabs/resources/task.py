@@ -125,18 +125,3 @@ class TaskResource:
         else:
             result = response.json()
             raise APIRequestError(f"Failed to delete task {task_id}: {result['message']}")
-
-    def get_status(self, index_id: Text) -> TaskStatus:
-        """
-        Get task status.
-
-        :param index_id: Index ID.
-        :return: Task status.
-        """
-
-        response = self.client.submit_request(f"tasks/status/{index_id}")
-        result = response.json()
-        if response.status_code == 200:
-            return TaskStatus(**result)
-        else:
-            raise APIRequestError(f"Failed to get task status for index {index_id}: {result['message']}")
