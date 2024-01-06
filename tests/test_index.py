@@ -4,8 +4,9 @@ from typing import Text
 
 from py_twelvelabs.models import Index
 from py_twelvelabs import TwelveLabsAPIClient
-from py_twelvelabs.exceptions import APIRequestError
 from py_twelvelabs.utilities import get_logger
+
+from tests.utilities import IndexCreator
 
 
 class TestIndex(unittest.TestCase):
@@ -19,7 +20,7 @@ class TestIndex(unittest.TestCase):
         """
 
         cls.client = TwelveLabsAPIClient()
-        cls.index_name = cls._generate_random_index_name()
+        cls.index_name = IndexCreator.generate_random_index_name()
         cls.index_id = None
 
         cls.logger = get_logger(__name__)
@@ -59,11 +60,11 @@ class TestIndex(unittest.TestCase):
         Test create index.
         """
 
-        index_id = self.client.index.create(self.index_name, ["visual", "conversation", "text_in_video", "logo"])
+        index_id = IndexCreator.create_index(self.index_name)
         self.logger.debug(f"Index ID: {index_id}")
 
-        TestIndex._set_index_id(index_id)
         self.assertIsNotNone(index_id)
+        TestIndex._set_index_id(index_id)
 
     def test_2_get_index(self):
         """
@@ -110,3 +111,7 @@ class TestIndex(unittest.TestCase):
 
         index = self.client.index.get(TestIndex._get_index_id())
         self.assertTrue(index.deleted)
+
+
+if __name__ == "__main__":
+    unittest.main()
