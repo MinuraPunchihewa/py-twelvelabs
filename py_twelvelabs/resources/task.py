@@ -8,7 +8,7 @@ class TaskResource:
     def __init__(self, client):
         self.client = client
 
-    def create(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: bool = False, transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: bool = False):
+    def create(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: Text = "false", transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: Text = "false"):
         """
         Create a task.
 
@@ -44,7 +44,7 @@ class TaskResource:
 
         response = self.client.submit_multi_part_request("tasks", method="POST", data=data)
         result = response.json()
-        if response.status_code == 200:
+        if response.status_code == 201:
             return result['_id']
         else:
             raise APIRequestError(f"Failed to create task: {result['message']}")
