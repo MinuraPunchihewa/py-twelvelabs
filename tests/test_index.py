@@ -8,7 +8,7 @@ from py_twelvelabs.utilities import get_logger
 
 from tests.utilities import IndexCreator
 
-
+# TODO: update all tests to run independently
 class TestIndex(unittest.TestCase):
     """
     Test index resource.
