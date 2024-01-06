@@ -24,16 +24,6 @@ class TestIndex(unittest.TestCase):
         cls.index_id = None
 
         cls.logger = get_logger(__name__)
-
-    @staticmethod
-    def _generate_random_index_name() -> Text:
-        """
-        Generate a random index name.
-
-        :return: Index name.
-        """
-
-        return f"test_index_{uuid.uuid4()}"
     
     @classmethod
     def _set_index_id(cls, index_id: Text):
