@@ -33,4 +33,4 @@ class TaskStatus(BaseModel):
     validating: int
     pending: int
     failed: int
-    total: int
+    total_result: int
