@@ -77,7 +77,18 @@ class TestIndex(unittest.TestCase):
         self.assertIsInstance(index, Index)
         self.assertEqual(index.index_name, self.index_name)
 
-    def test_3_list_indexes(self):
+    def test_3_get_task_status(self):
+        """
+        Test get task status.
+        """
+
+        task_status = self.client.index.get_task_status(TestIndex._get_index_id())
+        self.logger.debug(f"Task status: {task_status}")
+
+        self.assertIsNotNone(task_status)
+        self.assertEqual(task_status.index_id, TestIndex._get_index_id())
+
+    def test_4_list_indexes(self):
         """
         Test list indexes.
         """
@@ -88,7 +99,7 @@ class TestIndex(unittest.TestCase):
         self.assertIsInstance(indexes, list)
         self.assertTrue(len(indexes) > 0)
 
-    def test_4_update_index_name(self):
+    def test_5_update_index_name(self):
         """
         Test update index name.
         """
@@ -101,7 +112,7 @@ class TestIndex(unittest.TestCase):
         self.logger.debug(f"Index: {index}")
         self.assertEqual(index.index_name, new_index_name)
 
-    def test_5_delete_index(self):
+    def test_6_delete_index(self):
         """
         Test delete index.
         """
