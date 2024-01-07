@@ -1,3 +1,4 @@
+import uuid
 import unittest
 from typing import Text
 
@@ -5,7 +6,6 @@ from py_twelvelabs.models import Index
 from py_twelvelabs import TwelveLabsAPIClient
 from py_twelvelabs.utilities import get_logger
 
-from tests.utilities import IndexCreator
 
 # TODO: update all tests to run independently
 class TestIndex(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestIndex(unittest.TestCase):
         """
 
         cls.client = TwelveLabsAPIClient()
-        cls.index_name = IndexCreator.generate_random_index_name()
+        cls.index_name = f"test_index_{uuid.uuid4()}"
         cls.index_id = None
 
         cls.logger = get_logger(__name__)
@@ -50,7 +50,10 @@ class TestIndex(unittest.TestCase):
         Test create index.
         """
 
-        index_id = IndexCreator.create_index(self.index_name)
+        index_id = self.client.index.create(
+            self.index_name,
+            ["visual", "conversation", "text_in_video", "logo"]
+        )
         self.logger.debug(f"Index ID: {index_id}")
 
         self.assertIsNotNone(index_id)
