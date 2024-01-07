@@ -1,6 +1,6 @@
 
 from datetime import datetime
-from typing import Text, Dict
+from typing import Text, Dict, Optional
 from pydantic import BaseModel, validator
 
 
@@ -11,14 +11,15 @@ class Task(BaseModel):
 
     _id: Text
     index_id: Text
-    video_id: Text
+    video_id: Optional[Text] = None
     status: Text
     metadata: Dict
     created_at: datetime
     updated_at: datetime
-    type: Text
+    type: Optional[Text] = None
+    estimated_time: Optional[datetime] = None
 
-    @validator("created_at", "updated_at", pre=True, allow_reuse=True)
+    @validator("created_at", "updated_at", "estimated_time", pre=True, allow_reuse=True)
     def parse_date(cls, value):
         return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
     
