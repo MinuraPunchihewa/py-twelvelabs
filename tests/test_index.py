@@ -1,4 +1,3 @@
-import uuid
 import unittest
 from typing import Text
 
