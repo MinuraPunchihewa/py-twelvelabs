@@ -13,6 +13,7 @@ class TestIndex(unittest.TestCase):
     """
     Test index resource.
     """
+
     @classmethod
     def setUpClass(cls):
         """

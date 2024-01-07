@@ -14,6 +14,7 @@ class TestTask(unittest.TestCase):
     """
     Test task resource.
     """
+
     @classmethod
     def setUpClass(cls):
         """
