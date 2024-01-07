@@ -1,9 +1,11 @@
+import time
 import mimetypes
 from typing import Text, List
 
 from py_twelvelabs.models import Task
+from py_twelvelabs.settings import settings
 from py_twelvelabs.utilities.logger import get_logger
-from py_twelvelabs.exceptions import APIRequestError, InsufficientParametersError, TaskDeletionNotAllowedError
+from py_twelvelabs.exceptions import APIRequestError, InsufficientParametersError, TaskFailedError, TaskDeletionNotAllowedError
 
 
 class TaskResource:
@@ -12,9 +14,9 @@ class TaskResource:
         self.logger = get_logger(__name__)
 
     # TODO: convert to create_async
-    def create(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: Text = "false", transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: Text = "false"):
+    def create_async(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: Text = "false", transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: Text = "false"):
         """
-        Create a task.
+        Create a task asynchronously.
 
         :param index_id: Index ID.
         :param video_file: Video file. Either video_file or video_url must be provided.
@@ -53,7 +55,44 @@ class TaskResource:
         else:
             raise APIRequestError(f"Failed to create task: {result['message']}")
         
-    # TODO: add create_sync
+    def create_sync(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: Text = "false", transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: Text = "false"):
+        """
+        Create a task synchronously.
+
+        :param index_id: Index ID.
+        :param video_file: Video file. Either video_file or video_url must be provided.
+        :param video_url: Video URL. Either video_file or video_url must be provided.
+        :param language: Language.
+        :param provide_transcription: Provide transcription.
+        :param transcription_file: Transcription file.
+        :param transcription_url: Transcription URL.
+        :param disable_video_stream: Disable video stream.
+        :return: Task.
+        """
+
+        task_id = self.create_async(index_id, video_file, video_url, language, provide_transcription, transcription_file, transcription_url, disable_video_stream)
+
+        is_task_running = True
+
+        while is_task_running:
+            task = self.get(task_id)
+            task_status = task.status
+            self.logger.info(f"Task {task_id} is in the {task_status} state.")
+
+            wait_durtion = task['process']['remain_seconds'] if 'process' in task else settings.TASK_STATUS_POLLING_INTERVAL
+
+            if task_status in ('pending', 'indexing', 'validating'):
+                self.logger.info(f"Task {task_id} will be polled again in {wait_durtion} seconds.")
+                time.sleep(wait_durtion)
+
+            elif task_status == 'ready':
+                self.logger.info(f"Task {task_id} completed successfully.")
+                is_task_running = False
+
+            else:
+                raise TaskFailedError(f"Task {task_id} failed with status {task_status}.")
+            
+        return task
 
     def _get_video_tuple(self, video_file):
         return (video_file, open(video_file, "rb"), mimetypes.guess_type(video_file )[0])
