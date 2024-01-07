@@ -25,3 +25,10 @@ class InsufficientParametersError(Exception):
     Raised when insufficient parameters are provided.
     """
     pass
+
+
+class TaskDeletionNotAllowedError(Exception):
+    """
+    Raised when a task deletion is not allowed.
+    """
+    pass

@@ -1,13 +1,15 @@
 import mimetypes
 from typing import Text, List
 
-from py_twelvelabs.models import Task, TaskStatus
-from py_twelvelabs.exceptions import APIRequestError, InsufficientParametersError
+from py_twelvelabs.models import Task
+from py_twelvelabs.utilities.logger import get_logger
+from py_twelvelabs.exceptions import APIRequestError, InsufficientParametersError, TaskDeletionNotAllowedError
 
 
 class TaskResource:
     def __init__(self, client):
         self.client = client
+        self.logger = get_logger(__name__)
 
     def create(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: Text = "false", transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: Text = "false"):
         """
@@ -120,8 +122,12 @@ class TaskResource:
         """
 
         response = self.client.submit_request(f"tasks/{task_id}", method="DELETE")
+        # TODO: if the status of the task is 'ready', the video vector must be deleted first
         if response.status_code == 204:
             return True
+        elif response.status_code == 409:
+            self.logger.error(f"Failed to delete task {task_id}: {response.json()['message']}")
+            raise TaskDeletionNotAllowedError("Only tasks with status 'ready' or 'failed' can be deleted.")
         else:
             result = response.json()
             raise APIRequestError(f"Failed to delete task {task_id}: {result['message']}")
