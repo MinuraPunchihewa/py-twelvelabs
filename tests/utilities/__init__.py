@@ -31,3 +31,19 @@ class IndexCreator:
         )
 
         return index_id
+    
+
+class TaskCreator:
+    @staticmethod
+    def create_task(index_id: Text) -> Text:
+        """
+        Create task for testing.
+
+        :param index_id: Index ID.
+        :return: Task ID.
+        """
+
+        client = TwelveLabsAPIClient()
+        task_id = client.task.create(index_id=index_id, video_file="tests/data/test.mp4")
+
+        return task_id
