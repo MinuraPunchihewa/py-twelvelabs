@@ -5,6 +5,7 @@ from typing import Text
 from py_twelvelabs.models import Task
 from py_twelvelabs import TwelveLabsAPIClient
 from py_twelvelabs.utilities import get_logger
+from py_twelvelabs.exceptions import TaskDeletionNotAllowedError
 
 from tests.utilities import IndexCreator
 
@@ -65,6 +66,29 @@ class TestTask(unittest.TestCase):
         self.logger.info(f"Task: {task}")
 
         self.assertIsInstance(task, Task)
+
+    def test_3_list_tasks(self):
+        """
+        Test list tasks.
+        """
+
+        tasks = self.client.task.list()
+        self.logger.info(f"Tasks: {tasks}")
+
+        self.assertIsInstance(tasks, list)
+        self.assertGreater(len(tasks), 0)
+
+    def test_4_delete_task(self):
+        """
+        Test delete task.
+        """
+
+        try:
+            is_deleted = self.client.task.delete(TestTask._get_task_id())
+            self.assertTrue(is_deleted)
+        except TaskDeletionNotAllowedError as e:
+            self.logger.info(f"Task deletion not allowed: {e}")
+            self.assertIsInstance(e, TaskDeletionNotAllowedError)
 
 
 if __name__ == "__main__":
