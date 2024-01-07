@@ -1,3 +1,4 @@
+import uuid
 import unittest
 from typing import Text
 
@@ -6,7 +7,6 @@ from py_twelvelabs import TwelveLabsAPIClient
 from py_twelvelabs.utilities import get_logger
 from py_twelvelabs.exceptions import TaskDeletionNotAllowedError
 
-from tests.utilities import IndexCreator
 
 # TODO: update all tests to run independently
 class TestTask(unittest.TestCase):
@@ -21,7 +21,10 @@ class TestTask(unittest.TestCase):
         """
 
         cls.client = TwelveLabsAPIClient()
-        cls.index_id = IndexCreator.create_index()
+        cls.index_id = cls.client.index.create(
+            f"test_index_{uuid.uuid4()}",
+            ["visual", "conversation", "text_in_video", "logo"]
+        )
         cls.task_id = None
 
         cls.logger = get_logger(__name__)
