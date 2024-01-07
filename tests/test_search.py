@@ -18,8 +18,8 @@ class TestSearch(unittest.TestCase):
         """
 
         cls.client = TwelveLabsAPIClient()
-        # cls.index_id = IndexCreator.create_index()
-        # cls.task_id = TaskCreator.create_task(cls.index_id)
+        cls.index_id = IndexCreator.create_index()
+        cls.task_id = TaskCreator.create_task(cls.index_id)
 
         cls.logger = get_logger(__name__)
 
@@ -29,7 +29,7 @@ class TestSearch(unittest.TestCase):
         """
 
         results = self.client.search.query(
-            '659aec336bb8e7df9af17e47',
+            self.index_id,
             "Dog getting excited",
             ["visual", "conversation", "text_in_video", "logo"],
         )
