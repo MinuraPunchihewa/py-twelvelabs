@@ -32,3 +32,10 @@ class TaskDeletionNotAllowedError(Exception):
     Raised when a task deletion is not allowed.
     """
     pass
+
+
+class TaskFailedError(Exception):
+    """
+    Raised when a task fails.
+    """
+    pass
