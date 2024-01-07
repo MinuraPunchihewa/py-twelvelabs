@@ -21,7 +21,13 @@ class Task(BaseModel):
 
     @validator("created_at", "updated_at", "estimated_time", pre=True, allow_reuse=True)
     def parse_date(cls, value):
-        return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
+        formats = ["%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ"]
+        for fmt in formats:
+            try:
+                return datetime.strptime(value, fmt)
+            except ValueError:
+                continue
+        raise ValueError(f"time data '{value}' does not match any of the formats {formats}")
     
 
 class TaskStatus(BaseModel):
