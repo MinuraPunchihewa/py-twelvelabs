@@ -26,7 +26,7 @@ class SearchResource:
 
         data = {
             "index_id": index_id,
-            "search_query": search_query,
+            "query": search_query,
             "search_options": search_options,
             "group_by": group_by,
             "threshold": threshold,
