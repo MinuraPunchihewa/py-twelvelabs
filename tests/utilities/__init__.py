@@ -44,6 +44,6 @@ class TaskCreator:
         """
 
         client = TwelveLabsAPIClient()
-        task_id = client.task.create(index_id=index_id, video_file="tests/data/test.mp4")
+        task_id = client.task.create_sync(index_id=index_id, video_file="tests/data/test.mp4")
 
         return task_id
