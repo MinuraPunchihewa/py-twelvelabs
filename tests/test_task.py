@@ -46,12 +46,12 @@ class TestTask(unittest.TestCase):
 
         return cls.task_id
     
-    def test_1_create_task_sync(self):
+    def test_1_create_task_async(self):
         """
-        Test create task.
+        Test create task asynchronously.
         """
         
-        task_id = TaskCreator.create_task_sync(TestTask.index_id)
+        task_id = self.client.task.create_async(index_id=self.index_id, video_file="tests/data/test.mp4")
         self.logger.info(f"Task ID: {task_id}")
 
         self.assertIsNotNone(task_id)
@@ -90,6 +90,16 @@ class TestTask(unittest.TestCase):
             self.logger.info(f"Task deletion not allowed: {e}")
             self.assertIsInstance(e, TaskDeletionNotAllowedError)
 
+    def test_5_create_task_sync(self):
+        """
+        Test create task synchronously.
+        """
+
+        task = TaskCreator.create_task_sync(self.index_id)
+        self.logger.info(f"Task: {task}")
+
+        self.assertIsInstance(task, Task)
+        self.assertEqual(task.index_id, self.index_id)
 
 if __name__ == "__main__":
     unittest.main()
