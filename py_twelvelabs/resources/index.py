@@ -95,6 +95,8 @@ class IndexResource:
             return [Index(**index) for index in result['data']]
         else:
             raise APIRequestError(f"Failed to list indexes: {result['message']}")
+        
+    # TODO: add metod to list all tasks
 
     def update(self, index_id: Text, index_name: Text) -> bool:
         """

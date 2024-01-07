@@ -11,6 +11,7 @@ class TaskResource:
         self.client = client
         self.logger = get_logger(__name__)
 
+    # TODO: convert to create_async
     def create(self, index_id: Text, video_file: Text = None, video_url: Text = None, language: Text = "en", provide_transcription: Text = "false", transcription_file: Text = None, transcription_url: Text = None, disable_video_stream: Text = "false"):
         """
         Create a task.
@@ -51,6 +52,8 @@ class TaskResource:
             return result['_id']
         else:
             raise APIRequestError(f"Failed to create task: {result['message']}")
+        
+    # TODO: add create_sync
 
     def _get_video_tuple(self, video_file):
         return (video_file, open(video_file, "rb"), mimetypes.guess_type(video_file )[0])
