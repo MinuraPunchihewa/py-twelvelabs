@@ -6,7 +6,7 @@ from py_twelvelabs import TwelveLabsAPIClient
 from py_twelvelabs.utilities import get_logger
 from py_twelvelabs.exceptions import TaskDeletionNotAllowedError
 
-from tests.utilities import IndexCreator, TaskCreator
+from tests.utilities import IndexCreator
 
 # TODO: update all tests to run independently
 class TestTask(unittest.TestCase):
@@ -95,7 +95,7 @@ class TestTask(unittest.TestCase):
         Test create task synchronously.
         """
 
-        task = TaskCreator.create_task_sync(self.index_id)
+        task = self.client.task.create_sync(index_id=self.index_id, video_file="tests/data/test.mp4")
         self.logger.info(f"Task: {task}")
 
         self.assertIsInstance(task, Task)

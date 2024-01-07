@@ -3,7 +3,7 @@ import unittest
 from py_twelvelabs import TwelveLabsAPIClient
 from py_twelvelabs.utilities import get_logger
 
-from tests.utilities import IndexCreator, TaskCreator
+from tests.utilities import IndexCreator
 
 
 class TestSearch(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestSearch(unittest.TestCase):
 
         cls.client = TwelveLabsAPIClient()
         cls.index_id = IndexCreator.create_index()
-        cls.task_id = TaskCreator.create_task(cls.index_id)
+        cls.task_id = cls.client.task.create_sync(index_id=cls.index_id, video_file="tests/data/test.mp4")
 
         cls.logger = get_logger(__name__)
 
