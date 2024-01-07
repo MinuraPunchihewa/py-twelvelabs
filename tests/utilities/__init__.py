@@ -35,7 +35,7 @@ class IndexCreator:
 
 class TaskCreator:
     @staticmethod
-    def create_task(index_id: Text) -> Text:
+    def create_task_sync(index_id: Text) -> Text:
         """
         Create task for testing.
 

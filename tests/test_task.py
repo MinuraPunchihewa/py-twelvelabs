@@ -52,7 +52,7 @@ class TestTask(unittest.TestCase):
         Test create task.
         """
         
-        task_id = TaskCreator.create_task(TestTask.index_id)
+        task_id = TaskCreator.create_task_sync(TestTask.index_id)
         self.logger.info(f"Task ID: {task_id}")
 
         self.assertIsNotNone(task_id)
