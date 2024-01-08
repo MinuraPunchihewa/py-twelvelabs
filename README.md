@@ -27,5 +27,39 @@ client = TwelveLabsAPIClient()
 client = TwelveLabsAPIClient(api_key='tlk_...')
 ```
 
+### Indexes
 
+#### Create an Index
+```python
+index_id = client.index.create(
+    index_name='my_index',
+    index_options=["visual", "conversation", "text_in_video", "logo"]
+)
+```
 
+#### Get an Index
+```python
+index = client.index.get(index_id)
+```
+
+`index` will be an instance of the `Index` class.
+
+#### List Indexes
+```python
+indexes = client.index.list()
+```
+
+`indexes` will be a list of `Index` objects.
+
+#### Update an Index
+```python
+client.index.update(
+    index_id=index_id,
+    index_name='my_index_updated'
+)
+```
+
+#### Delete an Index
+```python
+client.index.delete(index_id)
+```
