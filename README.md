@@ -87,21 +87,21 @@ task = client.task.create_sync(
 
 `task` will be an instance of the `Task` class.
 
-#### Get a Task
+#### Get a Video Indexing Task
 ```python
 task = client.task.get(task_id)
 ```
 
 `task` will be an instance of the `Task` class.
 
-#### List Tasks
+#### List Video Indexing Tasks
 ```python
 tasks = client.task.list()
 ```
 
 `tasks` will be a list of `Task` objects.
 
-#### Delete a Task
+#### Delete a Video Indexing Task
 ```python
 client.task.delete(task_id)
 ```
