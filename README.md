@@ -63,3 +63,45 @@ client.index.update(
 ```python
 client.index.delete(index_id)
 ```
+
+### Tasks
+
+#### Create a Video Indexing Task
+Create a task asynchronously:
+```python
+task_id = client.task.create_async(
+    index_id=index_id,
+    video_file='path/to/my/video.mp4'
+)
+```
+
+`task_id` will be a string representing the ID of the task.
+
+Create a task synchronously:
+```python
+task = client.task.create_sync(
+    index_id=index_id,
+    video_file='path/to/my/video.mp4'
+)
+```
+
+`task` will be an instance of the `Task` class.
+
+#### Get a Task
+```python
+task = client.task.get(task_id)
+```
+
+`task` will be an instance of the `Task` class.
+
+#### List Tasks
+```python
+tasks = client.task.list()
+```
+
+`tasks` will be a list of `Task` objects.
+
+#### Delete a Task
+```python
+client.task.delete(task_id)
+```
