@@ -59,9 +59,11 @@ class IndexResource:
 
         response = self.client.submit_request(f"tasks/status?index_id={index_id}")
         result = response.json()
-        print(result)
         if response.status_code == 200:
-            return TaskStatus(**result)
+            if result is not None:
+                return TaskStatus(**result)
+            else:
+                return None
         else:
             raise APIRequestError(f"Failed to get task status for index {index_id}: {result['message']}")
         
