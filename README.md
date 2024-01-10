@@ -112,7 +112,7 @@ client.task.delete(task_id)
 ```python
 results = client.search.query(
     index_id=index_id,
-    query='my search query',
+    search_query='my search query',
     search_options=["visual", "conversation", "text_in_video", "logo"]
 )
 ```
